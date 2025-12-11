@@ -43,6 +43,9 @@ Supported MIME types:
 ```bash
 c newfile.txt           # Open in editor
 c newfile.txt "content" # Create with content
+c image.png             # Create 800x600 blank image
+c -w 1920 -h 1080 image.png  # Create custom size image
+c -w 500 photo.jpg      # Create 500x600 image (default height)
 ```
 
 ### Update (u)
@@ -65,6 +68,7 @@ d oldfile.txt    # Delete with confirmation
   - `duckdb` (CSV/TSV/Parquet viewer)
   - `pdftoppm` (PDF viewing)
   - `hexyl` (better hex dumps)
+  - `imagemagick` (image creation)
 
 ## License
 

@@ -26,6 +26,7 @@ RECOMMENDED_PACKAGES=(
     "poppler-utils"     # Provides pdftoppm for PDF viewing
     "hexyl"             # Better hex dumps
     "duckdb"            # CSV/TSV/Parquet viewer
+    "imagemagick"       # Image creation and manipulation
 )
 
 echo "Required packages:"
