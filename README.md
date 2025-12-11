@@ -73,6 +73,11 @@ d oldfile.txt    # Delete with confirmation
   - `pdftoppm` (PDF viewing)
   - `hexyl` (better hex dumps)
   - `imagemagick` (image creation)
+- **Optional editors** (for 'u' command):
+  - `gimp` or `krita` (image editing)
+  - `kdenlive` or `openshot` (video editing)
+  - `xournalpp` or `okular` (PDF annotation)
+  - `libreoffice` (CSV/spreadsheet editing)
 
 ## Configuration
 
@@ -105,7 +110,30 @@ cp wgcrud.conf ~/.config/wgcrud/
 # Edit to use your preferred tools
 # For example, change image editor from gimp to krita:
 # image/*:u=krita {file}
+
+# Or use Inkscape for vector images:
+# image/svg+xml:u=inkscape {file}
+
+# Use LibreOffice for CSV files:
+# text/csv:u=libreoffice --calc {file}
 ```
+
+### Suggested Tools by Category
+
+**Images:**
+- GUI: `gimp`, `krita`, `inkscape`, `kolourpaint`, `pinta`
+- CLI: `imagemagick display`
+
+**Videos:**
+- `kdenlive`, `openshot`, `shotcut`, `davinci-resolve`, `blender`
+
+**PDFs:**
+- Annotate: `xournalpp`, `okular`, `evince`
+- Edit: `libreoffice --draw`, `inkscape`, `pdfarranger`
+
+**CSV/Tabular:**
+- Spreadsheet: `libreoffice --calc`, `gnumeric`
+- Terminal: `sc-im`, `visidata`
 
 ## License
 
