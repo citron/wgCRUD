@@ -1,0 +1,16 @@
+#!/bin/bash
+# wgCRUD 'u' (update) - Edit/update existing files
+
+if [ $# -eq 0 ]; then
+    echo "Usage: u <file>"
+    exit 1
+fi
+
+FILE="$1"
+
+if [ ! -f "$FILE" ]; then
+    echo "Error: File '$FILE' not found"
+    exit 1
+fi
+
+${EDITOR:-vi} "$FILE"
