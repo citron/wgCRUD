@@ -1,6 +1,13 @@
 #!/bin/bash
 # wgCRUD 'r' (read/view) - Display files in terminal based on MIME type
 
+# Source library
+SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
+source "$SCRIPT_DIR/wgcrud-lib.sh"
+
+# Load config
+load_config
+
 # Parse options
 PAGE_RANGE=""
 while [[ $# -gt 0 ]]; do
@@ -30,6 +37,44 @@ fi
 # Get MIME type and file extension
 MIME=$(file --mime-type -b "$FILE")
 EXT="${FILE##*.}"
+
+# Try to get command from config first
+if [ -n "$WGCRUD_CONFIG" ]; then
+    # Handle PDF page ranges
+    if [[ "$MIME" == "application/pdf" ]]; then
+        TEMP_DIR=$(mktemp -d)
+        PAGES_OPT=""
+        if [ -n "$PAGE_RANGE" ]; then
+            if [[ "$PAGE_RANGE" =~ ^([0-9]*):([0-9]*)$ ]]; then
+                START="${BASH_REMATCH[1]:-1}"
+                END="${BASH_REMATCH[2]}"
+                if [ -z "$END" ]; then
+                    PAGES_OPT="-f $START"
+                else
+                    PAGES_OPT="-f $START -l $END"
+                fi
+            elif [[ "$PAGE_RANGE" =~ ^[0-9]+$ ]]; then
+                PAGES_OPT="-f $PAGE_RANGE -l $PAGE_RANGE"
+            fi
+        fi
+        
+        CMD=$(get_command "$MIME" "r" "$FILE" "" "" "$PAGES_OPT" "$TEMP_DIR")
+        if [ -n "$CMD" ]; then
+            eval "$CMD"
+            rm -rf "$TEMP_DIR"
+            exit 0
+        fi
+        rm -rf "$TEMP_DIR"
+    else
+        CMD=$(get_command "$MIME" "r" "$FILE")
+        if [ -n "$CMD" ]; then
+            eval "$CMD"
+            exit 0
+        fi
+    fi
+fi
+
+# Fallback to built-in logic if config not available or no matching rule
 
 case "$MIME" in
     image/*)

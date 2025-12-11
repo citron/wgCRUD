@@ -12,9 +12,13 @@ CRUD-like aliases for terminal file operations with Kitty graphics protocol supp
 ## Installation
 
 ```bash
-chmod +x c r u d
+chmod +x c r u d wgcrud-lib.sh
 # Add to PATH or create aliases:
 export PATH="$PATH:/home/gacquewi/wgCRUD"
+
+# Optional: Copy config to your home directory for customization
+mkdir -p ~/.config/wgcrud
+cp wgcrud.conf ~/.config/wgcrud/
 ```
 
 ## Usage
@@ -69,6 +73,39 @@ d oldfile.txt    # Delete with confirmation
   - `pdftoppm` (PDF viewing)
   - `hexyl` (better hex dumps)
   - `imagemagick` (image creation)
+
+## Configuration
+
+wgCRUD uses a configuration file to map MIME types to tools for each action. The config file is searched in the following locations (in order):
+
+1. `~/.config/wgcrud/wgcrud.conf`
+2. `~/.wgcrud.conf`
+3. `<install-dir>/wgcrud.conf`
+4. `/etc/wgcrud.conf`
+
+### Config Format
+
+```ini
+# Format: MIME_TYPE:ACTION=COMMAND
+# Actions: c (create), r (read), u (update), d (delete)
+# Placeholders: {file}, {width}, {height}, {pages}, {temp}
+
+image/*:r=kitty +kitten icat {file}
+image/*:u=gimp {file}
+text/csv:r=duckdb -c "SELECT * FROM '{file}';"
+```
+
+### Customization Example
+
+```bash
+# Copy default config
+mkdir -p ~/.config/wgcrud
+cp wgcrud.conf ~/.config/wgcrud/
+
+# Edit to use your preferred tools
+# For example, change image editor from gimp to krita:
+# image/*:u=krita {file}
+```
 
 ## License
 

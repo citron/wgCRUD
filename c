@@ -1,6 +1,13 @@
 #!/bin/bash
 # wgCRUD 'c' (create) - Create new files
 
+# Source library
+SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
+source "$SCRIPT_DIR/wgcrud-lib.sh"
+
+# Load config
+load_config
+
 # Parse options
 WIDTH=""
 HEIGHT=""
@@ -37,17 +44,41 @@ if [ -f "$FILE" ]; then
     exit 1
 fi
 
-# Get file extension
+# Get file extension and determine MIME type
 EXT="${FILE##*.}"
+MIME="text/plain"
 
-# Check if it's an image file
+# Determine MIME type from extension
+case "$EXT" in
+    png|jpg|jpeg|gif|bmp|tiff|webp)
+        MIME="image/$EXT"
+        ;;
+    csv) MIME="text/csv" ;;
+    tsv) MIME="text/tab-separated-values" ;;
+    parquet) MIME="application/parquet" ;;
+    pdf) MIME="application/pdf" ;;
+    json) MIME="application/json" ;;
+    xml) MIME="application/xml" ;;
+    js) MIME="application/javascript" ;;
+esac
+
+# Set default dimensions for images
+W="${WIDTH:-800}"
+H="${HEIGHT:-600}"
+
+# Try to get command from config first
+if [ -n "$WGCRUD_CONFIG" ]; then
+    CMD=$(get_command "$MIME" "c" "$FILE" "$W" "$H")
+    if [ -n "$CMD" ]; then
+        eval "$CMD"
+        echo "Created: $FILE"
+        exit 0
+    fi
+fi
+
+# Fallback to built-in logic
 if [[ "$EXT" =~ ^(png|jpg|jpeg|gif|bmp|tiff|webp)$ ]]; then
     if command -v convert &> /dev/null; then
-        # Set default dimensions if not provided
-        W="${WIDTH:-800}"
-        H="${HEIGHT:-600}"
-        
-        # Create blank image with ImageMagick
         convert -size "${W}x${H}" xc:white "$FILE"
         echo "Created: $FILE (${W}x${H})"
     else
@@ -55,10 +86,8 @@ if [[ "$EXT" =~ ^(png|jpg|jpeg|gif|bmp|tiff|webp)$ ]]; then
         exit 1
     fi
 elif [ -n "$CONTENT" ]; then
-    # Create file with provided content
     echo "$CONTENT" > "$FILE"
     echo "Created: $FILE"
 else
-    # Open in editor if no content provided
     ${EDITOR:-vi} "$FILE"
 fi

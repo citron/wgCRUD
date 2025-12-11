@@ -1,6 +1,13 @@
 #!/bin/bash
 # wgCRUD 'u' (update) - Edit/update existing files
 
+# Source library
+SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
+source "$SCRIPT_DIR/wgcrud-lib.sh"
+
+# Load config
+load_config
+
 if [ $# -eq 0 ]; then
     echo "Usage: u <file>"
     exit 1
@@ -13,4 +20,17 @@ if [ ! -f "$FILE" ]; then
     exit 1
 fi
 
+# Get MIME type
+MIME=$(file --mime-type -b "$FILE")
+
+# Try to get command from config first
+if [ -n "$WGCRUD_CONFIG" ]; then
+    CMD=$(get_command "$MIME" "u" "$FILE")
+    if [ -n "$CMD" ]; then
+        eval "$CMD"
+        exit 0
+    fi
+fi
+
+# Fallback to default editor
 ${EDITOR:-vi} "$FILE"
