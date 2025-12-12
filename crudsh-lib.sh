@@ -1,19 +1,19 @@
 #!/bin/bash
-# wgCRUD Library - Common functions for loading and using config
+# CRUD.sh Library - Common functions for loading and using config
 
 # Config file locations (checked in order)
 CONFIG_LOCATIONS=(
-    "$HOME/.config/wgcrud/wgcrud.conf"
-    "$HOME/.wgcrud.conf"
-    "$(dirname "${BASH_SOURCE[0]}")/wgcrud.conf"
-    "/etc/wgcrud.conf"
+    "$HOME/.config/crudsh/crudsh.conf"
+    "$HOME/.crudsh.conf"
+    "$(dirname "${BASH_SOURCE[0]}")/crudsh.conf"
+    "/etc/crudsh.conf"
 )
 
 # Find and source config file
 load_config() {
     for config in "${CONFIG_LOCATIONS[@]}"; do
         if [ -f "$config" ]; then
-            WGCRUD_CONFIG="$config"
+            CRUDSH_CONFIG="$config"
             return 0
         fi
     done
@@ -32,22 +32,22 @@ get_command() {
     local pages="${6:-}"
     local temp="${7:-}"
     
-    if [ -z "$WGCRUD_CONFIG" ]; then
+    if [ -z "$CRUDSH_CONFIG" ]; then
         return 1
     fi
     
     # Try exact match first
-    local cmd=$(grep -E "^${mime}:${action}=" "$WGCRUD_CONFIG" | head -n1 | cut -d= -f2-)
+    local cmd=$(grep -E "^${mime}:${action}=" "$CRUDSH_CONFIG" | head -n1 | cut -d= -f2-)
     
     # Try wildcard match (e.g., image/*)
     if [ -z "$cmd" ]; then
         local mime_prefix="${mime%%/*}"
-        cmd=$(grep -E "^${mime_prefix}/\*:${action}=" "$WGCRUD_CONFIG" | head -n1 | cut -d= -f2-)
+        cmd=$(grep -E "^${mime_prefix}/\*:${action}=" "$CRUDSH_CONFIG" | head -n1 | cut -d= -f2-)
     fi
     
     # Try default fallback (*)
     if [ -z "$cmd" ]; then
-        cmd=$(grep -E "^\*:${action}=" "$WGCRUD_CONFIG" | head -n1 | cut -d= -f2-)
+        cmd=$(grep -E "^\*:${action}=" "$CRUDSH_CONFIG" | head -n1 | cut -d= -f2-)
     fi
     
     # Return empty if no command found or command is empty

@@ -1,6 +1,6 @@
-# wgCRUD
+# CRUD.sh
 
-CRUD-like aliases for terminal file operations with Kitty graphics protocol support.
+CRUD operations for terminal file operations with Kitty graphics protocol support.
 
 ## Commands
 
@@ -12,13 +12,13 @@ CRUD-like aliases for terminal file operations with Kitty graphics protocol supp
 ## Installation
 
 ```bash
-chmod +x c r u d wgcrud-lib.sh
+chmod +x c r u d crudsh-lib.sh
 # Add to PATH or create aliases:
-export PATH="$PATH:/home/gacquewi/wgCRUD"
+export PATH="$PATH:/path/to/CRUD.sh"
 
 # Optional: Copy config to your home directory for customization
-mkdir -p ~/.config/wgcrud
-cp wgcrud.conf ~/.config/wgcrud/
+mkdir -p ~/.config/crudsh
+cp crudsh.conf ~/.config/crudsh/
 ```
 
 ## Usage
@@ -67,7 +67,7 @@ d oldfile.txt    # Delete with confirmation
 - **Required**: `file` (MIME detection)
 - **Recommended**:
   - `kitty` terminal (for image display)
-  - `bat` (syntax highlighting for text)
+  - `bat` (syntax highlighting for text; on Debian/Ubuntu, install `bat` package which provides `batcat`)
   - `mpv` (video player)
   - `duckdb` (CSV/TSV/Parquet viewer)
   - `pdftoppm` (PDF viewing)
@@ -81,12 +81,12 @@ d oldfile.txt    # Delete with confirmation
 
 ## Configuration
 
-wgCRUD uses a configuration file to map MIME types to tools for each action. The config file is searched in the following locations (in order):
+CRUD.sh uses a configuration file to map MIME types to tools for each action. The config file is searched in the following locations (in order):
 
-1. `~/.config/wgcrud/wgcrud.conf`
-2. `~/.wgcrud.conf`
-3. `<install-dir>/wgcrud.conf`
-4. `/etc/wgcrud.conf`
+1. `~/.config/crudsh/crudsh.conf`
+2. `~/.crudsh.conf`
+3. `<install-dir>/crudsh.conf`
+4. `/etc/crudsh.conf`
 
 ### Config Format
 
@@ -104,8 +104,8 @@ text/csv:r=duckdb -c "SELECT * FROM '{file}';"
 
 ```bash
 # Copy default config
-mkdir -p ~/.config/wgcrud
-cp wgcrud.conf ~/.config/wgcrud/
+mkdir -p ~/.config/crudsh
+cp crudsh.conf ~/.config/crudsh/
 
 # Edit to use your preferred tools
 # For example, change image editor from gimp to krita:

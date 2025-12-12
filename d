@@ -1,9 +1,9 @@
 #!/bin/bash
-# wgCRUD 'd' (delete) - Delete files with confirmation
+# CRUD.sh 'd' (delete) - Delete files with confirmation
 
 # Source library
 SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
-source "$SCRIPT_DIR/wgcrud-lib.sh"
+source "$SCRIPT_DIR/crudsh-lib.sh"
 
 # Load config
 load_config
@@ -27,7 +27,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
     MIME=$(file --mime-type -b "$FILE")
     
     # Try to get command from config first
-    if [ -n "$WGCRUD_CONFIG" ]; then
+    if [ -n "$CRUDSH_CONFIG" ]; then
         CMD=$(get_command "$MIME" "d" "$FILE")
         if [ -n "$CMD" ]; then
             eval "$CMD"

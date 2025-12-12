@@ -1,9 +1,9 @@
 #!/bin/bash
-# wgCRUD 'r' (read/view) - Display files in terminal based on MIME type
+# CRUD.sh 'r' (read/view) - Display files in terminal based on MIME type
 
 # Source library
 SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
-source "$SCRIPT_DIR/wgcrud-lib.sh"
+source "$SCRIPT_DIR/crudsh-lib.sh"
 
 # Load config
 load_config
@@ -39,7 +39,7 @@ MIME=$(file --mime-type -b "$FILE")
 EXT="${FILE##*.}"
 
 # Try to get command from config first
-if [ -n "$WGCRUD_CONFIG" ]; then
+if [ -n "$CRUDSH_CONFIG" ]; then
     # Handle PDF page ranges
     if [[ "$MIME" == "application/pdf" ]]; then
         TEMP_DIR=$(mktemp -d)
@@ -99,6 +99,8 @@ case "$MIME" in
         # Use duckdb for CSV/TSV files
         if command -v duckdb &> /dev/null; then
             duckdb -c "SELECT * FROM '$FILE';"
+        elif command -v batcat &> /dev/null; then
+            batcat "$FILE"
         elif command -v bat &> /dev/null; then
             bat "$FILE"
         else
@@ -119,11 +121,15 @@ case "$MIME" in
         if [[ "$EXT" == "csv" || "$EXT" == "tsv" || "$EXT" == "parquet" ]]; then
             if command -v duckdb &> /dev/null; then
                 duckdb -c "SELECT * FROM '$FILE';"
+            elif command -v batcat &> /dev/null; then
+                batcat "$FILE"
             elif command -v bat &> /dev/null; then
                 bat "$FILE"
             else
                 cat "$FILE"
             fi
+        elif command -v batcat &> /dev/null; then
+            batcat "$FILE"
         elif command -v bat &> /dev/null; then
             bat "$FILE"
         else
@@ -180,6 +186,8 @@ case "$MIME" in
         elif [[ "$EXT" == "csv" || "$EXT" == "tsv" ]]; then
             if command -v duckdb &> /dev/null; then
                 duckdb -c "SELECT * FROM '$FILE';"
+            elif command -v batcat &> /dev/null; then
+                batcat "$FILE"
             elif command -v bat &> /dev/null; then
                 bat "$FILE"
             else

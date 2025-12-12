@@ -1,9 +1,9 @@
 #!/bin/bash
-# wgCRUD 'c' (create) - Create new files
+# CRUD.sh 'c' (create) - Create new files
 
 # Source library
 SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
-source "$SCRIPT_DIR/wgcrud-lib.sh"
+source "$SCRIPT_DIR/crudsh-lib.sh"
 
 # Load config
 load_config
@@ -67,7 +67,7 @@ W="${WIDTH:-800}"
 H="${HEIGHT:-600}"
 
 # Try to get command from config first
-if [ -n "$WGCRUD_CONFIG" ]; then
+if [ -n "$CRUDSH_CONFIG" ]; then
     CMD=$(get_command "$MIME" "c" "$FILE" "$W" "$H")
     if [ -n "$CMD" ]; then
         eval "$CMD"

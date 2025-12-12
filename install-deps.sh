@@ -1,9 +1,9 @@
 #!/bin/bash
-# wgCRUD - Install Debian/Ubuntu dependencies
+# CRUD.sh - Install Debian/Ubuntu dependencies
 
 set -e
 
-echo "=== wgCRUD Dependency Installer ==="
+echo "=== CRUD.sh Dependency Installer ==="
 echo
 
 # Check if running as root or with sudo
@@ -68,7 +68,7 @@ if [[ ! $REPLY =~ ^[Nn]$ ]]; then
     done
     
     echo
-    echo "To use wgCRUD, add to your PATH:"
+    echo "To use CRUD.sh, add to your PATH:"
     echo "  export PATH=\"\$PATH:$(pwd)\""
 else
     echo "Installation cancelled."
